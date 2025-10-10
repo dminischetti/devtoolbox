@@ -67,6 +67,13 @@ export function layoutFrame(content) {
           <p><strong>Search memory:</strong> ${search ? search : 'No active search.'}</p>
         </div>
       </div>
+      <div class="shell footer-meta" role="contentinfo">
+        <p>© 2025 Dominic Minischetti</p>
+        <p>
+          Dedicated to optimizing performance and building scalable backend systems. I've been crafting fast, reliable solutions
+          since 2012.
+        </p>
+      </div>
     </footer>
     <div class="copy-toast" id="copy-toast" role="status" aria-live="polite">Copied ✓</div>
   `;
