@@ -22,44 +22,46 @@ export function layoutFrame(content) {
   document.body.classList.toggle('theme-light', theme === 'light');
 
   return `
-    <div class="offline-banner" id="offline-banner" role="status">
+    <div class="offline-banner" id="offline-banner" role="status" aria-live="polite">
       <span aria-hidden="true">⚠️</span>
       <span>Offline mode</span>
     </div>
-    <header class="sticky top-0 z-30 bg-surface/80 backdrop-blur-xl">
-      <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <img src="./assets/logo.svg" alt="DevToolbox logo" class="h-10 w-10 hero-logo" />
-          <div>
-            <p class="text-sm uppercase tracking-[0.3em] text-indigo-200/70">${APP_META.tagline}</p>
-            <h1 class="text-xl font-semibold">${APP_META.name}</h1>
-          </div>
-        </div>
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#/" class="nav-link" data-route="#/">Home</a>
-          <a href="#/tools" class="nav-link" data-route="#/tools">Tools</a>
-          <a href="#/study" class="nav-link" data-route="#/study">Case Study</a>
+    <div id="nav-backdrop" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href="#/" data-nav-link>
+          <span class="brand__mark">
+            <img src="./assets/logo.svg" alt="DevToolbox logo" />
+          </span>
+          <span class="brand__meta">
+            <span class="brand__tagline">${APP_META.tagline}</span>
+            <span class="brand__name">${APP_META.name}</span>
+          </span>
+        </a>
+        <nav class="site-nav" id="site-nav" data-open="false">
+          <a href="#/" class="nav-link" data-nav-link data-route="#/">Home</a>
+          <a href="#/tools" class="nav-link" data-nav-link data-route="#/tools">Tools</a>
+          <a href="#/study" class="nav-link" data-nav-link data-route="#/study">Case Study</a>
         </nav>
-        <div class="flex items-center gap-3">
-          <button class="button-ghost flex items-center gap-2" id="theme-toggle" aria-label="Toggle theme">
-            <span class="text-xs font-semibold">${theme === 'dark' ? 'Light' : 'Dark'} mode</span>
+        <div class="header-actions">
+          <button id="nav-toggle" class="icon-button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">
+            <span aria-hidden="true">☰</span>
           </button>
-          <button class="button-ghost hidden sm:flex items-center gap-2" id="open-help" aria-label="Keyboard shortcuts">
-            <span class="text-xs font-semibold">Shortcuts</span>
-          </button>
+          <button class="button-ghost" id="open-help" aria-label="Keyboard shortcuts">Shortcuts</button>
+          <button class="button-ghost" id="theme-toggle" aria-label="Toggle theme">${theme === 'dark' ? 'Light mode' : 'Dark mode'}</button>
         </div>
       </div>
     </header>
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="page-content">
       ${content}
     </div>
-    <footer class="max-w-6xl mx-auto px-6 py-16 text-sm opacity-80">
-      <div class="grid gap-4 sm:grid-cols-2">
+    <footer>
+      <div class="shell footer-grid">
         <div>
-          <h2 class="text-lg font-semibold">${APP_META.tagline}</h2>
-          <p class="mt-3 text-sm leading-relaxed">${APP_META.mission}</p>
+          <h2 class="brand__tagline">${APP_META.tagline}</h2>
+          <p>${APP_META.mission}</p>
         </div>
-        <div class="space-y-2">
+        <div>
           <p><strong>Favorites:</strong> ${favorites.length ? favorites.join(', ') : 'None yet — star a tool to save it.'}</p>
           <p><strong>Search memory:</strong> ${search ? search : 'No active search.'}</p>
         </div>
@@ -107,9 +109,34 @@ export function favoriteButton(slug) {
 }
 
 export function registerGlobalEvents(onThemeToggle, onHelp) {
+  const setNavState = (open) => {
+    const nav = document.getElementById('site-nav');
+    const toggle = document.getElementById('nav-toggle');
+    const backdrop = document.getElementById('nav-backdrop');
+    if (!nav || !toggle) return;
+    nav.dataset.open = open ? 'true' : 'false';
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    backdrop?.classList.toggle('visible', open);
+  };
+
   document.addEventListener('click', (event) => {
     if (event.target.closest('#theme-toggle')) {
       onThemeToggle();
+      const button = document.getElementById('theme-toggle');
+      if (button) {
+        button.textContent = getTheme() === 'dark' ? 'Light mode' : 'Dark mode';
+      }
+    }
+    if (event.target.closest('#nav-toggle')) {
+      const nav = document.getElementById('site-nav');
+      const isOpen = nav?.dataset.open === 'true';
+      setNavState(!isOpen);
+    }
+    if (event.target.closest('#nav-backdrop')) {
+      setNavState(false);
+    }
+    if (event.target.closest('[data-nav-link]')) {
+      setNavState(false);
     }
     const favButton = event.target.closest('.favorite-button');
     if (favButton) {
@@ -125,6 +152,12 @@ export function registerGlobalEvents(onThemeToggle, onHelp) {
     const copyBtn = event.target.closest('[data-copy]');
     if (copyBtn) {
       handleCopy(copyBtn.dataset.copy, copyBtn.dataset.message || 'Copied ✓');
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setNavState(false);
     }
   });
 }
