@@ -8,11 +8,18 @@ const routes = {
 };
 
 const pageCache = new Map();
+const NON_CACHEABLE_ROUTES = new Set(['#/tools']);
 let currentRoute = '';
+const historyStore = typeof window !== 'undefined' && window.sessionStorage ? window.sessionStorage : null;
 
 export function initRouter(root) {
   const handleRoute = async () => {
     const hash = window.location.hash || '#/';
+    const previousRoute = historyStore?.getItem('dt-current-route');
+    if (previousRoute && previousRoute !== hash) {
+      historyStore?.setItem('dt-last-route', previousRoute);
+    }
+    historyStore?.setItem('dt-current-route', hash);
     const [path, slug] = hash.split('/').reduce(
       (acc, part, index) => {
         if (index === 0) return acc;
@@ -32,21 +39,26 @@ export function initRouter(root) {
       const module = await import(`./tools/${slug}.js`);
       const view = module.default(tool);
       renderPageTransition(root, view);
+      currentRoute = hash;
       return;
     }
 
     const loader = routes[path] || routes['#/'];
     if (!loader) return;
 
-    if (pageCache.has(path)) {
+    if (!NON_CACHEABLE_ROUTES.has(path) && pageCache.has(path)) {
       renderPageTransition(root, pageCache.get(path));
+      currentRoute = hash;
       return;
     }
 
     const module = await loader();
     const view = module.default();
-    pageCache.set(path, view);
+    if (!NON_CACHEABLE_ROUTES.has(path)) {
+      pageCache.set(path, view);
+    }
     renderPageTransition(root, view);
+    currentRoute = hash;
   };
 
   window.addEventListener('hashchange', handleRoute);

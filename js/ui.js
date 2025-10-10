@@ -2,6 +2,7 @@ import { APP_META, getFavorites, getSearchTerm, getTheme, isFavorite, toggleFavo
 import { copyToClipboard } from './utils/strings.js';
 
 let toastTimeout;
+const historyStore = typeof window !== 'undefined' && window.sessionStorage ? window.sessionStorage : null;
 
 export function renderPageTransition(root, markup) {
   root.innerHTML = '';
@@ -103,7 +104,7 @@ export function offlineBanner(status) {
 
 export function favoriteButton(slug) {
   const active = isFavorite(slug);
-  return `<button class="button-ghost favorite-button" data-slug="${slug}" aria-pressed="${active}">
+  return `<button type="button" class="button-ghost favorite-button" data-slug="${slug}" aria-pressed="${active}">
     <span>${active ? '★ Favorited' : '☆ Favorite'}</span>
   </button>`;
 }
@@ -138,6 +139,16 @@ export function registerGlobalEvents(onThemeToggle, onHelp) {
     if (event.target.closest('[data-nav-link]')) {
       setNavState(false);
     }
+    const backButton = event.target.closest('[data-tool-back]');
+    if (backButton) {
+      event.preventDefault();
+      const lastRoute = historyStore?.getItem('dt-last-route');
+      const fallback = '#/tools';
+      const target = lastRoute && lastRoute !== window.location.hash ? lastRoute : fallback;
+      window.location.hash = target;
+      return;
+    }
+
     const favButton = event.target.closest('.favorite-button');
     if (favButton) {
       const slug = favButton.dataset.slug;
