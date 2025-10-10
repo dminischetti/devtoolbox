@@ -24,7 +24,10 @@ export function toolPage(tool, { workspace, output, actions, notes }) {
           <p class="text-indigo-100/80 text-lg">${tool.tagline}</p>
         </div>
         <div class="flex gap-3 flex-wrap">
-          <a href="#/tools" class="button-ghost">← Back to tools</a>
+          <button type="button" class="button-ghost" data-tool-back>
+            <span aria-hidden="true">←</span>
+            <span>Back</span>
+          </button>
           ${favoriteButton(tool.slug)}
         </div>
       </header>

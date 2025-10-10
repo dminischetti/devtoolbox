@@ -9,10 +9,16 @@ const routes = {
 
 const pageCache = new Map();
 let currentRoute = '';
+const historyStore = typeof window !== 'undefined' && window.sessionStorage ? window.sessionStorage : null;
 
 export function initRouter(root) {
   const handleRoute = async () => {
     const hash = window.location.hash || '#/';
+    const previousRoute = historyStore?.getItem('dt-current-route');
+    if (previousRoute && previousRoute !== hash) {
+      historyStore?.setItem('dt-last-route', previousRoute);
+    }
+    historyStore?.setItem('dt-current-route', hash);
     const [path, slug] = hash.split('/').reduce(
       (acc, part, index) => {
         if (index === 0) return acc;
@@ -32,6 +38,7 @@ export function initRouter(root) {
       const module = await import(`./tools/${slug}.js`);
       const view = module.default(tool);
       renderPageTransition(root, view);
+      currentRoute = hash;
       return;
     }
 
@@ -40,6 +47,7 @@ export function initRouter(root) {
 
     if (pageCache.has(path)) {
       renderPageTransition(root, pageCache.get(path));
+      currentRoute = hash;
       return;
     }
 
@@ -47,6 +55,7 @@ export function initRouter(root) {
     const view = module.default();
     pageCache.set(path, view);
     renderPageTransition(root, view);
+    currentRoute = hash;
   };
 
   window.addEventListener('hashchange', handleRoute);
