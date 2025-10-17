@@ -1,0 +1,693 @@
+/* Timespent Theme */
+
+/* =========================================
+   Theme Tokens
+========================================= */
+:root {
+  --ts-font-sans: 'Poppins', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --ts-font-mono: 'JetBrains Mono', 'Courier New', Courier, monospace;
+  --ts-radius-lg: 20px;
+  --ts-radius-md: 16px;
+  --ts-radius-sm: 12px;
+  --ts-radius-xs: 10px;
+  --ts-border-width: 3px;
+  --ts-border-color: #040404;
+  --ts-shadow-sm: 3px 3px 0 #000;
+  --ts-shadow-md: 4px 4px 0 #000;
+  --ts-shadow-lg: 8px 8px 0 #000;
+  --ts-color-page: #fff7b3;
+  --ts-color-page-alt: #bff4c5;
+  --ts-color-page-accent: #96d1ff;
+  --ts-color-surface: #ffffff;
+  --ts-color-surface-alt: #ffe3ec;
+  --ts-color-ink: #111111;
+  --ts-color-muted: #2f2f33;
+  --ts-color-muted-soft: #4c4c52;
+  --ts-color-accent: #1db86c;
+  --ts-color-accent-blue: #3ca0ff;
+  --ts-color-accent-pink: #ff6fb7;
+  --ts-color-sticker: #ffe36d;
+  --ts-focus-ring: 3px solid #000;
+  --ts-sticker-rotation: -2deg;
+}
+
+/* =========================================
+   Base Overrides
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) {
+  --font-sans: var(--ts-font-sans);
+  --font-mono: var(--ts-font-mono);
+  --radius-lg: var(--ts-radius-lg);
+  --radius-md: var(--ts-radius-md);
+  --radius-sm: var(--ts-radius-sm);
+  --color-bg: var(--ts-color-page);
+  --color-bg-alt: var(--ts-color-page-alt);
+  --color-surface: var(--ts-color-surface);
+  --color-border: var(--ts-border-color);
+  --color-border-subtle: var(--ts-border-color);
+  --color-text: var(--ts-color-ink);
+  --color-muted: var(--ts-color-muted);
+  --accent-primary: var(--ts-color-accent);
+  --accent-secondary: var(--ts-color-accent-blue);
+  --accent-tertiary: var(--ts-color-accent-pink);
+  --accent-soft: rgba(0, 0, 0, 0.08);
+  --shadow-soft: var(--ts-shadow-lg);
+  --shadow-hover: 10px 10px 0 #000;
+  --shadow-ambient: var(--ts-shadow-md);
+  --blur-lg: 0px;
+  --blur-md: 0px;
+  --gradient-bg: var(--ts-color-page);
+  color-scheme: light;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) body {
+  background: var(--ts-color-page);
+  color: var(--ts-color-ink);
+  font-family: var(--ts-font-sans);
+  letter-spacing: 0.01em;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) body::before {
+  display: none !important;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) *,
+:where(.timespent-theme, html.theme-dark, html.theme-light) *::before,
+:where(.timespent-theme, html.theme-dark, html.theme-light) *::after {
+  box-shadow: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) ::selection {
+  background: var(--ts-color-sticker);
+  color: var(--ts-color-ink);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) a {
+  color: var(--ts-color-ink);
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--ts-color-ink);
+  font-weight: 600;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) strong {
+  color: var(--ts-color-ink);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) kbd,
+:where(.timespent-theme, html.theme-dark, html.theme-light) code {
+  font-family: var(--ts-font-mono);
+  background: #111;
+  color: #f9f9f9;
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-xs);
+  padding: 0.15em 0.4em;
+  box-shadow: var(--ts-shadow-sm);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .shell {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .shell::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: var(--ts-radius-lg);
+  border: var(--ts-border-width) solid #000;
+  background: transparent;
+  z-index: -1;
+  opacity: 0.08;
+}
+
+/* Focus states */
+:where(.timespent-theme, html.theme-dark, html.theme-light) :focus-visible {
+  outline: var(--ts-focus-ring);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   Global Layout
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) section {
+  padding: 5.5rem 0;
+  position: relative;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) section:nth-of-type(odd) {
+  background: linear-gradient(0deg, var(--ts-color-page-alt), var(--ts-color-page-alt));
+  border-top: var(--ts-border-width) solid #000;
+  border-bottom: var(--ts-border-width) solid #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) section:nth-of-type(even) {
+  background: linear-gradient(0deg, var(--ts-color-page-accent), var(--ts-color-page-accent));
+  border-top: var(--ts-border-width) solid #000;
+  border-bottom: var(--ts-border-width) solid #000;
+}
+
+/* =========================================
+   Header & Navigation
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-header {
+  background: var(--ts-color-sticker);
+  border-bottom: var(--ts-border-width) solid #000;
+  box-shadow: var(--ts-shadow-lg);
+  backdrop-filter: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-header__inner {
+  padding: 1.2rem 0;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .brand {
+  gap: 0.6rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .brand__mark {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: var(--ts-radius-md);
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  padding: 0.6rem;
+  box-shadow: var(--ts-shadow-md);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .brand__mark::before {
+  content: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .brand__name {
+  color: var(--ts-color-ink);
+  background: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .brand__tagline {
+  color: var(--ts-color-muted);
+  letter-spacing: 0.3em;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav {
+  gap: 0.75rem;
+  padding: 0.65rem;
+  border-radius: 40px;
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  box-shadow: var(--ts-shadow-md);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav a {
+  border-radius: 999px;
+  border: var(--ts-border-width) solid transparent;
+  padding: 0.6rem 1.4rem;
+  font-weight: 700;
+  position: relative;
+  background: transparent;
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav a::before {
+  content: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav a:hover,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav a.active {
+  background: var(--ts-color-accent);
+  border-color: #000;
+  color: #000;
+  box-shadow: var(--ts-shadow-sm);
+  transform: translate(-2px, -2px);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .header-actions {
+  gap: 0.5rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .icon-button,
+:where(.timespent-theme, html.theme-dark, html.theme-light) #nav-toggle {
+  border-radius: 50%;
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  color: #000;
+  width: 3rem;
+  height: 3rem;
+  box-shadow: var(--ts-shadow-md);
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .icon-button:hover,
+:where(.timespent-theme, html.theme-dark, html.theme-light) #nav-toggle:hover {
+  transform: translate(-2px, -2px);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) #nav-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Offline banner */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .offline-banner {
+  border-radius: 20px;
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-sticker);
+  color: #000;
+  box-shadow: var(--ts-shadow-md);
+  letter-spacing: 0.1em;
+}
+
+/* =========================================
+   Buttons & Inputs
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .btn,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-primary,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-ghost,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__footer .btn,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__footer .button-ghost {
+  border-radius: var(--ts-radius-sm);
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  color: #000;
+  box-shadow: var(--ts-shadow-md);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .btn,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-primary {
+  background: var(--ts-color-accent);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-ghost {
+  background: var(--ts-color-surface);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .btn:hover,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-primary:hover,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-ghost:hover {
+  transform: translate(-3px, -3px);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .btn:active,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-primary:active,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .button-ghost:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) input,
+:where(.timespent-theme, html.theme-dark, html.theme-light) textarea,
+:where(.timespent-theme, html.theme-dark, html.theme-light) select {
+  border-radius: var(--ts-radius-sm);
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  color: var(--ts-color-ink);
+  font-family: var(--ts-font-sans);
+  font-size: 1rem;
+  box-shadow: var(--ts-shadow-sm);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) input:focus,
+:where(.timespent-theme, html.theme-dark, html.theme-light) textarea:focus,
+:where(.timespent-theme, html.theme-dark, html.theme-light) select:focus {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--ts-shadow-md);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-hub__search-field {
+  background: var(--ts-color-surface);
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-md);
+  box-shadow: var(--ts-shadow-md);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-hub__search-field span {
+  color: #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-hub__search-field:focus-within {
+  transform: translate(-3px, -3px);
+}
+
+/* =========================================
+   Hero Section
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero {
+  background: var(--ts-color-page-alt);
+  border-bottom: var(--ts-border-width) solid #000;
+  border-top: var(--ts-border-width) solid #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero__inner {
+  gap: 3rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-card {
+  border-radius: var(--ts-radius-lg);
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  box-shadow: var(--ts-shadow-lg);
+  overflow: hidden;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-card::after {
+  content: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-eyebrow {
+  color: #000;
+  letter-spacing: 0.4em;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-title {
+  color: #000;
+  background: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-copy {
+  color: var(--ts-color-muted);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-actions {
+  gap: 1rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-badges {
+  gap: 0.75rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-badge {
+  background: var(--ts-color-sticker);
+  border: var(--ts-border-width) solid #000;
+  color: #000;
+  border-radius: 12px;
+  box-shadow: var(--ts-shadow-sm);
+  transform: rotate(var(--ts-sticker-rotation));
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-badge:nth-of-type(even) {
+  transform: rotate(1.5deg);
+}
+
+/* =========================================
+   Highlight Cards & Tool Cards
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .highlight-card,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .card-inner {
+  background: var(--ts-color-surface);
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-lg);
+  box-shadow: var(--ts-shadow-lg);
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .highlight-card::before,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card::before {
+  content: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .highlight-card:hover,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card:hover {
+  transform: translate(-4px, -4px);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card.is-active {
+  transform: translate(-5px, -5px);
+  background: var(--ts-color-surface-alt);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__icon {
+  border-radius: 16px;
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-sticker);
+  padding: 0.75rem;
+  box-shadow: var(--ts-shadow-sm);
+  transform: rotate(-3deg);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__title {
+  color: #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__tag,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__tag,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__meta span,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .section-heading__label {
+  display: inline-block;
+  background: var(--ts-color-sticker);
+  border: var(--ts-border-width) solid #000;
+  border-radius: 12px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #000;
+  box-shadow: var(--ts-shadow-sm);
+  transform: rotate(var(--ts-sticker-rotation));
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__copy,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__copy,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__footer {
+  color: var(--ts-color-muted-soft);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__actions {
+  gap: 0.75rem;
+}
+
+/* =========================================
+   Tool Preview & Code Blocks
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-preview__surface,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-sandbox,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tabs,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .architecture__grid,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-panel,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .glass-panel {
+  background: var(--ts-color-surface);
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-lg);
+  box-shadow: var(--ts-shadow-lg);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-sandbox,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tabs,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .architecture__grid {
+  padding: clamp(2rem, 5vw, 3rem);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__title,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .section-heading__title {
+  color: #000;
+  background: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__controls,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-actions {
+  flex-wrap: wrap;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .code-block {
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-md);
+  box-shadow: var(--ts-shadow-lg);
+  overflow: hidden;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .code-block pre {
+  background: #111;
+  color: #f6f6f6;
+  border: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .code-block button {
+  border-radius: var(--ts-radius-xs);
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-sticker);
+  color: #000;
+  box-shadow: var(--ts-shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .code-block button:hover {
+  transform: translate(-2px, -2px);
+}
+
+/* =========================================
+   Architecture Nodes & Docs Tabs
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .architecture-node {
+  background: var(--ts-color-surface);
+  border: var(--ts-border-width) solid #000;
+  box-shadow: var(--ts-shadow-md);
+  transform: none;
+  opacity: 1;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .architecture-graph::before,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .architecture-graph::after {
+  content: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tablist {
+  border-bottom: var(--ts-border-width) solid #000;
+  gap: 0.8rem;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tab-trigger {
+  border-radius: 16px;
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-surface);
+  color: #000;
+  box-shadow: var(--ts-shadow-sm);
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tab-trigger[aria-selected='true'] {
+  background: var(--ts-color-accent-blue);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tab-trigger:hover {
+  transform: translate(-2px, -2px);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tab-panel {
+  color: var(--ts-color-muted);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tab-panel[aria-hidden='false'] {
+  display: grid;
+  gap: 1.2rem;
+}
+
+/* =========================================
+   Modal
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: none;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__dialog {
+  background: var(--ts-color-surface);
+  border: var(--ts-border-width) solid #000;
+  border-radius: var(--ts-radius-lg);
+  box-shadow: var(--ts-shadow-lg);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__close {
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-sticker);
+  color: #000;
+  box-shadow: var(--ts-shadow-sm);
+  transition: transform 120ms ease;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__close:hover {
+  transform: translate(-2px, -2px) rotate(0deg);
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__body {
+  color: var(--ts-color-muted);
+}
+
+/* =========================================
+   Footer & Toast
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) footer {
+  background: var(--ts-color-page-accent);
+  border-top: var(--ts-border-width) solid #000;
+  color: #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .footer-grid,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .footer-meta {
+  color: #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .copy-toast {
+  border: var(--ts-border-width) solid #000;
+  background: var(--ts-color-sticker);
+  color: #000;
+  box-shadow: var(--ts-shadow-md);
+}
+
+/* =========================================
+   Utility Badges & Stickers
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) .hero-badge,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__tag,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__tag,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .section-heading__label,
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-modal__meta span {
+  transform-origin: center;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card__tag:nth-of-type(even),
+:where(.timespent-theme, html.theme-dark, html.theme-light) .preview-meta__tag:nth-of-type(even) {
+  transform: rotate(2deg);
+}
+
+/* =========================================
+   Scrollbars
+========================================= */
+:where(.timespent-theme, html.theme-dark, html.theme-light) ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) ::-webkit-scrollbar-track {
+  background: var(--ts-color-page-alt);
+  border: var(--ts-border-width) solid #000;
+}
+
+:where(.timespent-theme, html.theme-dark, html.theme-light) ::-webkit-scrollbar-thumb {
+  background: var(--ts-color-sticker);
+  border: var(--ts-border-width) solid #000;
+}
+
+/* =========================================
+   Responsive Adjustments
+========================================= */
+@media (max-width: 900px) {
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav {
+    background: var(--ts-color-surface);
+    border: var(--ts-border-width) solid #000;
+    box-shadow: var(--ts-shadow-lg);
+  }
+
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .site-nav[data-open='true'] {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  :where(.timespent-theme, html.theme-dark, html.theme-light) section {
+    padding: 4rem 0;
+  }
+
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .hero-actions {
+    flex-direction: column;
+  }
+
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .hero-actions .btn,
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .hero-actions .button-ghost {
+    width: 100%;
+  }
+
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .tool-card,
+  :where(.timespent-theme, html.theme-dark, html.theme-light) .highlight-card {
+    padding: 1.8rem;
+  }
+}
