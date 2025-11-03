@@ -1,0 +1,18 @@
+[
+  {"code":200,"title":"OK","description":"The request succeeded.","category":"Success","action":"Return the response body."},
+  {"code":201,"title":"Created","description":"A new resource has been created.","category":"Success","action":"Provide the new resource URL."},
+  {"code":204,"title":"No Content","description":"The server successfully processed the request but returns no content.","category":"Success","action":"Ensure idempotent clients handle empty responses."},
+  {"code":301,"title":"Moved Permanently","description":"The resource has a new permanent URI.","category":"Redirect","action":"Update clients to use the new location."},
+  {"code":302,"title":"Found","description":"Temporary redirect.","category":"Redirect","action":"Use 307 for non-GET methods to preserve semantics."},
+  {"code":304,"title":"Not Modified","description":"The resource has not been modified since the last request.","category":"Redirect","action":"Serve cached version to the client."},
+  {"code":400,"title":"Bad Request","description":"The request could not be understood due to malformed syntax.","category":"Client Error","action":"Validate client input and resend."},
+  {"code":401,"title":"Unauthorized","description":"Authentication is required or has failed.","category":"Client Error","action":"Check credentials or tokens."},
+  {"code":403,"title":"Forbidden","description":"The server understood the request but refuses to authorize it.","category":"Client Error","action":"Verify permissions or contact support."},
+  {"code":404,"title":"Not Found","description":"The server has not found anything matching the URI.","category":"Client Error","action":"Check the endpoint and resource identifiers."},
+  {"code":409,"title":"Conflict","description":"The request conflicts with the current state of the resource.","category":"Client Error","action":"Resolve resource state before retrying."},
+  {"code":422,"title":"Unprocessable Entity","description":"The server understands the content type but was unable to process contained instructions.","category":"Client Error","action":"Fix validation errors and resubmit."},
+  {"code":429,"title":"Too Many Requests","description":"The user has sent too many requests in a given amount of time.","category":"Client Error","action":"Respect rate limits or backoff."},
+  {"code":500,"title":"Internal Server Error","description":"An unexpected condition was encountered.","category":"Server Error","action":"Check logs for server-side failures."},
+  {"code":502,"title":"Bad Gateway","description":"The server received an invalid response from the upstream server.","category":"Server Error","action":"Investigate upstream dependencies."},
+  {"code":503,"title":"Service Unavailable","description":"The server is currently unable to handle the request.","category":"Server Error","action":"Retry later or scale infrastructure."}
+]

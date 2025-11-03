@@ -1,0 +1,6 @@
+{
+  "node": ["node_modules/", "npm-debug.log", "yarn-error.log"],
+  "python": ["__pycache__/", "*.py[cod]", "env/"],
+  "rust": ["target/", "Cargo.lock"],
+  "design": [".DS_Store", "Thumbs.db", "*.sketch", "*.fig"]
+}
