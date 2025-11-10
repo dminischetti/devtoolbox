@@ -268,7 +268,7 @@ export default function renderHome() {
             </div>
             <div class="architecture-node">
               <strong>Service Worker</strong>
-              <span>Offline caching, theme persistence, and zero telemetry.</span>
+              <span>Offline caching, persistent favorites, and zero telemetry.</span>
             </div>
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function renderHome() {
           <div class="tab-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" aria-hidden="false">
             <p>DevToolbox is a static, offline-ready lab of developer utilities. Each tool embraces the same interaction patterns: focus on the input, run with <kbd>⌘/Ctrl + Enter</kbd>, copy output instantly, and celebrate with subtle glow feedback.</p>
             <ul>
-              <li>Dark-by-default with optional light mode, persisted in local storage.</li>
+              <li>Unified dark theme with high-contrast neutral grays.</li>
               <li>Glass panels use <code>backdrop-filter</code> when available and gracefully degrade otherwise.</li>
               <li>Motion respects <code>prefers-reduced-motion</code> and falls back to instant state changes.</li>
             </ul>

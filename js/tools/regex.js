@@ -47,18 +47,18 @@ function init() {
       const regex = new RegExp(pattern, flags.includes('g') ? flags : `${flags}g`);
       const matches = Array.from(sampleInput.value.matchAll(regex));
       if (!matches.length) {
-        results.innerHTML = `<p class="text-indigo-200/70">No matches found.</p>`;
+        results.innerHTML = `<p class="text-zinc-200/70">No matches found.</p>`;
         return;
       }
       const highlighted = highlightMatches(sampleInput.value, regex);
       const captures = matches
         .map(
-          (match, index) => `<div class="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
-            <p class="font-semibold">Match ${index + 1}: <span class="text-indigo-100/90">${match[0]}</span></p>
-            ${match.length > 1 ? `<p class="mt-2 text-xs uppercase tracking-[0.2em] text-indigo-200/60">Groups</p>
+          (match, index) => `<div class="p-4 rounded-lg bg-zinc-500/10 border border-zinc-500/20">
+            <p class="font-semibold">Match ${index + 1}: <span class="text-zinc-100/90">${match[0]}</span></p>
+            ${match.length > 1 ? `<p class="mt-2 text-xs uppercase tracking-[0.2em] text-zinc-200/60">Groups</p>
               <ul class="mt-1 space-y-1 text-sm">${match
                 .slice(1)
-                .map((group, i) => `<li><span class="text-indigo-200/80">$${i + 1}</span> → ${group ?? '<em>empty</em>'}</li>`)
+                .map((group, i) => `<li><span class="text-zinc-200/80">$${i + 1}</span> → ${group ?? '<em>empty</em>'}</li>`)
                 .join('')}</ul>` : ''}
           </div>`
         )
@@ -69,13 +69,13 @@ function init() {
       </div>
       <div class="mt-4 space-y-3">${captures}</div>`;
     } catch (error) {
-      results.innerHTML = `<p class="text-rose-300">${error.message}</p>`;
+      results.innerHTML = `<p class="text-sm text-zinc-100 font-semibold">${error.message}</p>`;
     }
   };
 
   const clear = () => {
     sampleInput.value = '';
-    results.innerHTML = '<p class="text-indigo-200/70">Cleared. Paste text to begin.</p>';
+    results.innerHTML = '<p class="text-zinc-200/70">Cleared. Paste text to begin.</p>';
   };
 
   runButton?.addEventListener('click', run);

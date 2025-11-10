@@ -1,5 +1,6 @@
 import { toolPage } from './base.js';
 import { handleCopy } from '../ui.js';
+import { handleError } from '../utils/errors.js';
 
 export default function renderJson(tool) {
   setTimeout(() => init());
@@ -57,11 +58,16 @@ function init() {
       const indentValue = indentSelect.value === '\\t' ? '\\t' : Number(indentSelect.value);
       const formatted = JSON.stringify(processed, null, indentValue);
       output.textContent = formatted;
-      status.innerHTML = `<span class="text-emerald-300">JSON looks healthy ✓</span>`;
+      status.textContent = 'JSON looks healthy ✓';
+      status.className = 'text-sm text-zinc-300 font-medium';
       output.classList.add('animate-[pulseGlow_1.6s_ease]');
       setTimeout(() => output.classList.remove('animate-[pulseGlow_1.6s_ease]'), 1600);
     } catch (error) {
-      status.innerHTML = `<span class="text-rose-300">${error.message}</span>`;
+      const { message } = handleError('json:format', error, {
+        userMessage: 'Invalid JSON. Check for missing commas or quotes and try again.'
+      });
+      status.textContent = message;
+      status.className = 'text-sm text-zinc-100 font-semibold';
     }
   };
 
@@ -69,6 +75,7 @@ function init() {
     input.value = '';
     output.textContent = '';
     status.textContent = '';
+    status.className = 'text-sm';
   };
 
   document.getElementById('json-validate')?.addEventListener('click', run);

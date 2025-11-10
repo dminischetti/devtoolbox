@@ -1,5 +1,6 @@
 import { toolPage } from './base.js';
 import { handleCopy, showToast } from '../ui.js';
+import { handleError } from '../utils/errors.js';
 
 export default function renderJwt(tool) {
   setTimeout(() => init());
@@ -9,7 +10,7 @@ export default function renderJwt(tool) {
         <label for="jwt-input">JWT Token</label>
         <textarea id="jwt-input" rows="6"></textarea>
       </div>
-      <div class="space-y-2 text-xs text-indigo-200/70">
+      <div class="space-y-2 text-xs text-zinc-200/70">
         <p>Paste a JWT to decode header and payload without hitting any server.</p>
       </div>
     `,
@@ -66,12 +67,18 @@ async function init() {
       const payload = JSON.parse(atobUrlSafe(parts[1]));
       headerEl.textContent = JSON.stringify(header, null, 2);
       payloadEl.textContent = JSON.stringify(payload, null, 2);
-      signatureEl.textContent = parts[2];
+      let signatureMessage = parts[2];
       if (header.alg === 'none') {
-        signatureEl.innerHTML += ' ⚠️ Algorithm "none" is insecure.';
+        signatureMessage += ' ⚠️ Algorithm "none" is insecure.';
       }
+      signatureEl.textContent = signatureMessage;
     } catch (error) {
-      signatureEl.textContent = `Decode failed: ${error.message}`;
+      headerEl.textContent = '';
+      payloadEl.textContent = '';
+      const { message } = handleError('jwt:decode', error, {
+        userMessage: 'Decode failed. Confirm the token is well-formed and base64url encoded.'
+      });
+      signatureEl.textContent = message;
     }
   };
 
@@ -94,11 +101,20 @@ async function init() {
 }
 
 function atobUrlSafe(value) {
-  const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
-  const padded = base64 + '==='.slice((base64.length + 3) % 4);
-  return decodeURIComponent(
-    Array.from(atob(padded))
-      .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-      .join('')
-  );
+  try {
+    if (typeof value !== 'string' || value.trim() === '') {
+      throw new Error('Segment is empty.');
+    }
+    if (!/^[A-Za-z0-9_-]+$/.test(value)) {
+      throw new Error('Segment contains invalid characters.');
+    }
+    const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base64 + '==='.slice((base64.length + 3) % 4);
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    const decoder = new TextDecoder('utf-8', { fatal: true });
+    return decoder.decode(bytes);
+  } catch (error) {
+    throw new Error(`Invalid base64url encoding: ${error.message}`);
+  }
 }

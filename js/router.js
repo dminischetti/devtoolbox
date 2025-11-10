@@ -11,6 +11,25 @@ const pageCache = new Map();
 const NON_CACHEABLE_ROUTES = new Set(['#/tools']);
 let currentRoute = '';
 const historyStore = typeof window !== 'undefined' && window.sessionStorage ? window.sessionStorage : null;
+const MAX_CACHE_SIZE = 10;
+
+function cacheSet(key, value) {
+  if (pageCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = pageCache.keys().next().value;
+    pageCache.delete(firstKey);
+  }
+  pageCache.set(key, value);
+}
+
+function parseRoute(hash) {
+  const normalized = hash && hash.startsWith('#') ? hash : `#${hash ?? '/'}`;
+  const segments = normalized
+    .slice(1)
+    .split('/')
+    .filter(Boolean);
+  const path = `#/${segments[0] ?? ''}`;
+  return { path, segments: segments.slice(1) };
+}
 
 export function initRouter(root) {
   const handleRoute = async () => {
@@ -20,20 +39,13 @@ export function initRouter(root) {
       historyStore?.setItem('dt-last-route', previousRoute);
     }
     historyStore?.setItem('dt-current-route', hash);
-    const [path, slug] = hash.split('/').reduce(
-      (acc, part, index) => {
-        if (index === 0) return acc;
-        if (index === 1) acc[0] = `#/${part}`;
-        else acc[1] = part;
-        return acc;
-      },
-      ['#/', undefined]
-    );
+    const { path, segments } = parseRoute(hash);
+    const slug = segments[0];
 
     if (slug) {
       const tool = getToolBySlug(slug);
       if (!tool) {
-        renderPageTransition(root, `<section class="py-24 text-center">\n          <h1 class="text-3xl font-semibold">Tool not found.</h1>\n          <p class="mt-4 text-indigo-200/80">Double-check the URL or explore the tools hub.</p>\n        </section>`);
+        renderPageTransition(root, `<section class="py-24 text-center">\n          <h1 class="text-3xl font-semibold">Tool not found.</h1>\n          <p class="mt-4 text-zinc-200/80">Double-check the URL or explore the tools hub.</p>\n        </section>`);
         return;
       }
       const module = await import(`./tools/${slug}.js`);
@@ -55,7 +67,7 @@ export function initRouter(root) {
     const module = await loader();
     const view = module.default();
     if (!NON_CACHEABLE_ROUTES.has(path)) {
-      pageCache.set(path, view);
+      cacheSet(path, view);
     }
     renderPageTransition(root, view);
     currentRoute = hash;

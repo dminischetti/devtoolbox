@@ -33,7 +33,7 @@ export default function renderHash(tool) {
           <h3 class="text-lg font-semibold">Base64</h3>
           <p id="hash-base64" class="font-mono break-all"></p>
         </div>
-        <p id="hash-entropy" class="text-xs text-indigo-200/70"></p>
+        <p id="hash-entropy" class="text-xs text-zinc-200/70"></p>
       </div>
     `,
     notes: 'Hash Forge uses Web Crypto to hash messages, sharing both hex and Base64 results instantly.'

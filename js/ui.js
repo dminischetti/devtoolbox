@@ -1,4 +1,4 @@
-import { APP_META, getFavorites, getSearchTerm, getTheme, isFavorite, toggleFavorite } from './state.js';
+import { APP_META, getFavorites, getSearchTerm, isFavorite, toggleFavorite } from './state.js';
 import { copyToClipboard } from './utils/strings.js';
 
 let toastTimeout;
@@ -18,10 +18,6 @@ export function renderPageTransition(root, markup) {
 export function layoutFrame(content) {
   const favorites = getFavorites();
   const search = getSearchTerm();
-  const theme = getTheme();
-  document.documentElement.classList.toggle('theme-light', theme === 'light');
-  document.body.classList.toggle('theme-light', theme === 'light');
-
   return `
     <div class="offline-banner" id="offline-banner" role="status" aria-live="polite">
       <span aria-hidden="true">⚠️</span>
@@ -49,7 +45,6 @@ export function layoutFrame(content) {
             <span aria-hidden="true">☰</span>
           </button>
           <button class="button-ghost" id="open-help" aria-label="Keyboard shortcuts">Shortcuts</button>
-          <button class="button-ghost" id="theme-toggle" aria-label="Toggle theme">${theme === 'dark' ? 'Light mode' : 'Dark mode'}</button>
         </div>
       </div>
     </header>
@@ -116,7 +111,7 @@ export function favoriteButton(slug) {
   </button>`;
 }
 
-export function registerGlobalEvents(onThemeToggle, onHelp) {
+export function registerGlobalEvents(onHelp) {
   const setNavState = (open) => {
     const nav = document.getElementById('site-nav');
     const toggle = document.getElementById('nav-toggle');
@@ -128,13 +123,6 @@ export function registerGlobalEvents(onThemeToggle, onHelp) {
   };
 
   document.addEventListener('click', (event) => {
-    if (event.target.closest('#theme-toggle')) {
-      onThemeToggle();
-      const button = document.getElementById('theme-toggle');
-      if (button) {
-        button.textContent = getTheme() === 'dark' ? 'Light mode' : 'Dark mode';
-      }
-    }
     if (event.target.closest('#nav-toggle')) {
       const nav = document.getElementById('site-nav');
       const isOpen = nav?.dataset.open === 'true';
@@ -166,7 +154,7 @@ export function registerGlobalEvents(onThemeToggle, onHelp) {
       favButton.innerHTML = `<span>${active ? '★ Favorited' : '☆ Favorite'}</span>`;
       showToast(active ? 'Added to favorites' : 'Removed from favorites');
     }
-    if (event.target.closest('#open-help')) {
+    if (onHelp && event.target.closest('#open-help')) {
       onHelp();
     }
     const copyBtn = event.target.closest('[data-copy]');

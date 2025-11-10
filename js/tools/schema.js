@@ -41,12 +41,14 @@ async function init() {
       const data = JSON.parse(dataInput.value);
       const errors = validateData(schema, data, '#');
       if (!errors.length) {
-        result.innerHTML = '<p class="text-emerald-300">Valid ✓</p>';
+        result.innerHTML = '<p class="text-sm text-zinc-300 font-medium">Valid ✓</p>';
       } else {
-        result.innerHTML = `<ul class="space-y-2">${errors.map((err) => `<li class="text-rose-300">${err}</li>`).join('')}</ul>`;
+        result.innerHTML = `<ul class="space-y-2">${errors
+          .map((err) => `<li class="text-sm text-zinc-100 font-semibold">${err}</li>`)
+          .join('')}</ul>`;
       }
     } catch (error) {
-      result.innerHTML = `<p class="text-rose-300">${error.message}</p>`;
+      result.innerHTML = `<p class="text-sm text-zinc-100 font-semibold">${error.message}</p>`;
     }
   };
 

@@ -1,58 +1,58 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" rx="32" fill="#0F1115"/>
+  <rect width="1200" height="630" rx="32" fill="#0C0C0C"/>
   <g filter="url(#glow)">
     <circle cx="250" cy="210" r="180" fill="url(#gradA)" fill-opacity="0.85"/>
     <circle cx="980" cy="160" r="220" fill="url(#gradB)" fill-opacity="0.75"/>
     <circle cx="700" cy="480" r="260" fill="url(#gradC)" fill-opacity="0.7"/>
   </g>
-  <rect x="120" y="120" width="960" height="390" rx="24" fill="rgba(10,12,17,0.9)" stroke="rgba(114,129,255,0.3)" stroke-width="1.5"/>
+  <rect x="120" y="120" width="960" height="390" rx="24" fill="rgba(14,14,14,0.9)" stroke="rgba(128,128,128,0.3)" stroke-width="1.5"/>
   <g filter="url(#panelGlow)">
-    <rect x="172" y="176" width="272" height="272" rx="18" fill="rgba(34,36,53,0.9)"/>
-    <rect x="480" y="176" width="498" height="118" rx="18" fill="rgba(34,36,53,0.9)"/>
-    <rect x="480" y="326" width="498" height="122" rx="18" fill="rgba(34,36,53,0.85)"/>
+    <rect x="172" y="176" width="272" height="272" rx="18" fill="rgba(34,34,34,0.9)"/>
+    <rect x="480" y="176" width="498" height="118" rx="18" fill="rgba(34,34,34,0.9)"/>
+    <rect x="480" y="326" width="498" height="122" rx="18" fill="rgba(34,34,34,0.85)"/>
   </g>
-  <text x="200" y="230" fill="#AAB6FF" font-family="'Inter', 'Segoe UI', sans-serif" font-weight="600" font-size="18">TOOLBOX</text>
-  <text x="200" y="266" fill="#F8FAFF" font-family="'Inter', 'Segoe UI', sans-serif" font-weight="700" font-size="34">Regex Explorer</text>
-  <text x="200" y="304" fill="#95A3FF" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="18">const matches = input.matchAll(pattern)</text>
-  <text x="200" y="338" fill="#C9CEFF" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="18">return [...matches].map(showCapture)</text>
+  <text x="200" y="230" fill="#D4D4D4" font-family="'Inter', 'Segoe UI', sans-serif" font-weight="600" font-size="18">TOOLBOX</text>
+  <text x="200" y="266" fill="#F4F4F4" font-family="'Inter', 'Segoe UI', sans-serif" font-weight="700" font-size="34">Regex Explorer</text>
+  <text x="200" y="304" fill="#C0C0C0" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="18">const matches = input.matchAll(pattern)</text>
+  <text x="200" y="338" fill="#E0E0E0" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="18">return [...matches].map(showCapture)</text>
   <rect x="200" y="366" width="216" height="18" rx="9" fill="url(#gradA)" opacity="0.7"/>
   <rect x="200" y="394" width="120" height="18" rx="9" fill="url(#gradB)" opacity="0.65"/>
   <rect x="200" y="422" width="160" height="18" rx="9" fill="url(#gradC)" opacity="0.8"/>
-  <text x="520" y="232" fill="#6470FF" font-family="'Inter', 'Segoe UI', sans-serif" font-size="16" letter-spacing="0.4em" text-transform="uppercase">DevToolbox</text>
-  <text x="520" y="282" fill="#F4F7FF" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="700">Thoughtful Tools.</text>
-  <text x="520" y="332" fill="#F4F7FF" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="700">Beautifully Engineered.</text>
-  <text x="520" y="378" fill="#C8CCFF" font-family="'Inter', 'Segoe UI', sans-serif" font-size="20" opacity="0.8">A handcrafted lab of mini-tools that feels like a product launch.</text>
-  <text x="520" y="410" fill="#C8CCFF" font-family="'Inter', 'Segoe UI', sans-serif" font-size="20" opacity="0.8">Offline-first. Privacy-respectful. Delightfully animated.</text>
-  <g font-family="'JetBrains Mono', 'Courier New', monospace" font-size="16" fill="#9DA5FF">
+  <text x="520" y="232" fill="#9C9C9C" font-family="'Inter', 'Segoe UI', sans-serif" font-size="16" letter-spacing="0.4em" text-transform="uppercase">DevToolbox</text>
+  <text x="520" y="282" fill="#F4F4F4" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="700">Thoughtful Tools.</text>
+  <text x="520" y="332" fill="#F4F4F4" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="700">Beautifully Engineered.</text>
+  <text x="520" y="378" fill="#D8D8D8" font-family="'Inter', 'Segoe UI', sans-serif" font-size="20" opacity="0.8">A handcrafted lab of mini-tools that feels like a product launch.</text>
+  <text x="520" y="410" fill="#D8D8D8" font-family="'Inter', 'Segoe UI', sans-serif" font-size="20" opacity="0.8">Offline-first. Privacy-respectful. Delightfully animated.</text>
+  <g font-family="'JetBrains Mono', 'Courier New', monospace" font-size="16" fill="#C4C4C4">
     <text x="520" y="456">tools.launch('#/tools')</text>
     <text x="520" y="486">favorites.pin('regex')</text>
-    <text x="520" y="516">theme.toggle('light')</text>
+    <text x="520" y="516">state.persist('favorites')</text>
   </g>
   <rect x="520" y="536" width="210" height="52" rx="26" fill="url(#gradButton)"/>
-  <text x="555" y="568" fill="#0F1115" font-family="'Inter', 'Segoe UI', sans-serif" font-size="22" font-weight="600">Launch the Lab</text>
+  <text x="555" y="568" fill="#0C0C0C" font-family="'Inter', 'Segoe UI', sans-serif" font-size="22" font-weight="600">Launch the Lab</text>
   <defs>
     <radialGradient id="gradA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 210) rotate(46) scale(220)">
-      <stop stop-color="#7C4DFF"/>
-      <stop offset="1" stop-color="#4E7DFF"/>
+      <stop stop-color="#3F3F3F"/>
+      <stop offset="1" stop-color="#2A2A2A"/>
     </radialGradient>
     <radialGradient id="gradB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 160) rotate(58) scale(260)">
-      <stop stop-color="#00E0FF"/>
-      <stop offset="1" stop-color="#5B4BFF"/>
+      <stop stop-color="#3A3A3A"/>
+      <stop offset="1" stop-color="#2C2C2C"/>
     </radialGradient>
     <radialGradient id="gradC" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(700 480) rotate(68) scale(280)">
-      <stop stop-color="#FF6CFF"/>
-      <stop offset="1" stop-color="#605BFF"/>
+      <stop stop-color="#4F4F4F"/>
+      <stop offset="1" stop-color="#303030"/>
     </radialGradient>
     <linearGradient id="gradButton" x1="520" y1="536" x2="730" y2="588" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8F82FF"/>
-      <stop offset="1" stop-color="#58F6FF"/>
+      <stop stop-color="#4A4A4A"/>
+      <stop offset="1" stop-color="#2F2F2F"/>
     </linearGradient>
     <filter id="glow" x="-60" y="-60" width="1320" height="750" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feGaussianBlur stdDeviation="60" result="blur"/>
       <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
     </filter>
     <filter id="panelGlow" x="130" y="140" width="960" height="390" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="20" stdDeviation="40" flood-color="rgba(72,83,255,0.28)"/>
+      <feDropShadow dx="0" dy="20" stdDeviation="40" flood-color="rgba(120,120,120,0.28)"/>
     </filter>
   </defs>
 </svg>

@@ -12,13 +12,13 @@
 
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 0 0 0 rgba(127, 91, 255, 0.45);
+    box-shadow: 0 0 0 0 rgba(200, 200, 200, 0.45);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(127, 91, 255, 0);
+    box-shadow: 0 0 0 12px rgba(200, 200, 200, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(127, 91, 255, 0);
+    box-shadow: 0 0 0 0 rgba(200, 200, 200, 0);
   }
 }
 
@@ -63,7 +63,7 @@
   content: '';
   position: absolute;
   inset: -40%;
-  background: radial-gradient(circle, rgba(120, 98, 255, 0.4), transparent 60%);
+  background: radial-gradient(circle, rgba(180, 180, 180, 0.4), transparent 60%);
   animation: floaty 18s ease-in-out infinite;
   z-index: -1;
 }

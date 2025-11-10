@@ -24,7 +24,7 @@ export default function renderCron(tool) {
       <div class="space-y-4 text-sm">
         <div>
           <h3 class="text-lg font-semibold">Human schedule</h3>
-          <p id="cron-human" class="text-indigo-100/80"></p>
+          <p id="cron-human" class="text-zinc-100/80"></p>
         </div>
         <div>
           <h3 class="text-lg font-semibold">Upcoming runs</h3>

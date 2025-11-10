@@ -33,7 +33,7 @@ function init() {
     const uuid = crypto.randomUUID();
     const entry = document.createElement('div');
     entry.textContent = uuid;
-    entry.className = 'px-3 py-2 rounded bg-black/30 border border-indigo-500/20 animate-[pulseGlow_1.2s_ease]';
+    entry.className = 'px-3 py-2 rounded bg-black/30 border border-zinc-500/20 animate-[pulseGlow_1.2s_ease]';
     stream.prepend(entry);
     while (stream.children.length > 5) {
       stream.removeChild(stream.lastChild);

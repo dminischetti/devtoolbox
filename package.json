@@ -1,0 +1,12 @@
+{
+  "name": "devtoolbox",
+  "version": "1.0.0",
+  "description": "Developer utilities toolkit",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^1.5.0"
+  }
+}

@@ -1,24 +1,16 @@
 import { initRouter } from './router.js';
-import { getTheme, toggleTheme } from './state.js';
-import { offlineBanner, registerGlobalEvents, showToast, updateNavState } from './ui.js';
+import { offlineBanner, registerGlobalEvents, updateNavState } from './ui.js';
 import { registerShortcuts } from './utils/shortcuts.js';
+import { installGlobalErrorHandlers } from './utils/errors.js';
 import './sw-register.js';
 
 const root = document.getElementById('app');
 
 const router = initRouter(root);
 
-registerGlobalEvents(
-  () => {
-    const theme = toggleTheme();
-    document.documentElement.classList.toggle('theme-light', theme === 'light');
-    document.body.classList.toggle('theme-light', theme === 'light');
-    showToast(`Switched to ${theme} mode`);
-  },
-  () => {
-    showShortcuts();
-  }
-);
+installGlobalErrorHandlers();
+
+registerGlobalEvents(showShortcuts);
 
 registerShortcuts({
   onSearch: () => document.getElementById('tool-search')?.focus(),
@@ -52,8 +44,3 @@ const syncNavState = () => {
 syncNavState();
 window.addEventListener('hashchange', syncNavState);
 
-document.addEventListener('DOMContentLoaded', () => {
-  const theme = getTheme();
-  document.documentElement.classList.toggle('theme-light', theme === 'light');
-  document.body.classList.toggle('theme-light', theme === 'light');
-});

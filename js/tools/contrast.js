@@ -12,7 +12,7 @@ export default function renderContrast(tool) {
         </div>
         <div class="space-y-4">
           <label for="contrast-background">Background</label>
-          <input id="contrast-background" type="color" value="#0f1115" />
+          <input id="contrast-background" type="color" value="#0f0f0f" />
         </div>
       </div>
     `,
@@ -75,7 +75,7 @@ function init() {
 
   const reset = () => {
     foreground.value = '#f8f8f8';
-    background.value = '#0f1115';
+    background.value = '#0f0f0f';
     analyze();
   };
 

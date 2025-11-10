@@ -28,8 +28,10 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((cached) =>
       cached ||
       fetch(event.request).then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        if (response && response.ok && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        }
         return response;
       })
     )

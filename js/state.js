@@ -130,7 +130,6 @@ const TOOL_DEFINITIONS = [
 ];
 
 const state = {
-  theme: storage.get('dt-theme') || 'dark',
   favorites: new Set(storage.get('dt-favorites') || []),
   tools: TOOL_DEFINITIONS,
   search: ''
@@ -142,16 +141,6 @@ export function getTools() {
 
 export function getToolBySlug(slug) {
   return state.tools.find((tool) => tool.slug === slug);
-}
-
-export function getTheme() {
-  return state.theme;
-}
-
-export function toggleTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  storage.set('dt-theme', state.theme);
-  return state.theme;
 }
 
 export function setSearchTerm(term) {

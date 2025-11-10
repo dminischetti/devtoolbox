@@ -8,7 +8,7 @@ export default function renderHttp(tool) {
         <label for="http-search">Search status code</label>
         <input id="http-search" placeholder="e.g. 404 or not found" />
       </div>
-      <p class="text-sm text-indigo-200/70">Data sourced from the HTTP specification, stored locally.</p>
+      <p class="text-sm text-zinc-200/70">Data sourced from the HTTP specification, stored locally.</p>
     `,
     actions: `
       <button class="button-primary" id="http-run" data-run>Lookup</button>
@@ -38,20 +38,20 @@ async function init() {
       item.code.toString().includes(term) || item.title.toLowerCase().includes(term) || item.description.toLowerCase().includes(term)
     );
     if (!filtered.length) {
-      results.innerHTML = '<p class="text-indigo-200/70">No matching status codes.</p>';
+      results.innerHTML = '<p class="text-zinc-200/70">No matching status codes.</p>';
       return;
     }
     results.innerHTML = filtered
       .map(
         (item) => `
-          <article class="p-4 rounded bg-black/30 border border-indigo-500/20">
+          <article class="p-4 rounded bg-black/30 border border-zinc-500/20">
             <div class="flex items-baseline justify-between">
               <h4 class="text-xl font-semibold">${item.code}</h4>
-              <span class="text-xs uppercase tracking-[0.3em] text-indigo-200/60">${item.category}</span>
+              <span class="text-xs uppercase tracking-[0.3em] text-zinc-200/60">${item.category}</span>
             </div>
             <p class="mt-2 font-semibold">${item.title}</p>
-            <p class="mt-2 text-indigo-100/80">${item.description}</p>
-            <p class="mt-3 text-xs text-indigo-200/60">Remedy: ${item.action}</p>
+            <p class="mt-2 text-zinc-100/80">${item.description}</p>
+            <p class="mt-3 text-xs text-zinc-200/60">Remedy: ${item.action}</p>
           </article>
         `
       )

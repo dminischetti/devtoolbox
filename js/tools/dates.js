@@ -77,7 +77,7 @@ function init() {
     if (secondary.value) {
       const metrics = diffInUnits(new Date(primary.value), new Date(secondary.value));
       diff.innerHTML = Object.entries(metrics)
-        .map(([unit, value]) => `<li>${unit}: <span class="text-indigo-100/85">${value}</span></li>`)
+        .map(([unit, value]) => `<li>${unit}: <span class="text-zinc-100/85">${value}</span></li>`)
         .join('');
     } else {
       diff.innerHTML = '<li>Set a secondary date to compare differences.</li>';

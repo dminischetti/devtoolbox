@@ -68,7 +68,7 @@ export function toolPage(tool, { workspace, output, actions, notes }) {
             <img src="${tool.icon}" alt="${tool.name} icon" class="h-12 w-12" />
             ${tool.name}
           </h2>
-          <p class="text-indigo-100/80 text-lg">${tool.tagline}</p>
+          <p class="text-zinc-100/80 text-lg">${tool.tagline}</p>
         </div>
         <div class="flex gap-3 flex-wrap">
           <button type="button" class="button-ghost" data-tool-back>
