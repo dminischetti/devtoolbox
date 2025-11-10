@@ -50,6 +50,9 @@ export function installGlobalErrorHandlers() {
     });
   });
   window.addEventListener('unhandledrejection', (event) => {
+    if (typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
     handleError('global:unhandled-rejection', event.reason);
   });
   installed = true;
