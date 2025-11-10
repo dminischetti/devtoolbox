@@ -1,4 +1,4 @@
-const CACHE_NAME = 'devtoolbox-v2';
+const CACHE_NAME = 'devtoolbox-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,10 @@ const ASSETS = [
   './css/animations.css',
   './js/app.js',
   './js/router.js',
-  './js/state.js'
+  './js/state.js',
+  './js/pages/home.js',
+  './js/pages/tools-hub.js',
+  './js/pages/study.js'
 ];
 
 self.addEventListener('install', (event) => {
