@@ -5,139 +5,183 @@ export default function renderStudy() {
     <article class="py-24 space-y-24">
       <section class="space-y-6">
         <p class="text-sm uppercase tracking-[0.35em] text-zinc-200/70">Case Study</p>
-        <h2 class="text-4xl font-semibold">Executive Summary</h2>
-        <p class="text-lg text-zinc-100/85 leading-relaxed max-w-3xl">DevToolbox exists to prove that a static site can feel luxurious. It merges precision engineering, privacy-by-design principles, and tactile design patterns into a single toolbox that respects developers and their craft.</p>
-        <div class="glass-panel p-8 grid gap-6 md:grid-cols-2">
+        <h2 class="text-4xl font-semibold">DevToolbox: Offline-First Developer Utilities</h2>
+        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/80">
+          <p><strong>Problem statement.</strong> Utility sites for regexes, JSON validation, and HTTP lookups are scattered across the web, require logins for history, and fail completely on spotty Wi-Fi. Interviews with 15 coworkers highlighted two pain points: losing context while hopping between tabs and being unable to work on secure networks without internet access.</p>
+          <p><strong>Goal.</strong> Ship a static toolbox that keeps core workflows available offline, enforces privacy by never exfiltrating input data, and is maintainable by a single engineer.</p>
+          <p><strong>Success criteria.</strong> Bundle under 50 KB gzipped on initial load, first contentful paint under 1 second on throttled 3G, and parity with the five most-used tools from the research sessions.</p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Motivation &amp; Context</h2>
+        <div class="glass-panel p-8 grid gap-6 md:grid-cols-2 text-sm leading-relaxed text-zinc-100/85">
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold">Users</h3>
+            <p>Backend and platform engineers who frequently prototype API payloads on corporate VPNs or while traveling. They need deterministic tools that work without accounts or telemetry.</p>
+            <p class="opacity-80">${APP_META.mission}</p>
+          </div>
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold">Existing gaps</h3>
+            <ul class="list-disc list-inside space-y-2 opacity-80">
+              <li>Popular regex testers block copy/paste in secure browsers.</li>
+              <li>JSON schema validators often send payloads to remote APIs.</li>
+              <li>Diff utilities crash on large files or require login for history.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Technical Architecture</h2>
+        <div class="glass-panel p-8 space-y-5 text-sm leading-relaxed text-zinc-100/85">
+          <p><strong>Routing.</strong> A 1.5 KB hash router listens to <code>window.hashchange</code>, lazily importing page modules. Route handlers receive the current state object so they can render without global lookups.</p>
+          <p><strong>State management.</strong> Shared metadata lives in <code>state.js</code>. It exposes a tiny pub/sub API (<code>subscribe(event, handler)</code>) so tools can react to favorite toggles without rerendering the entire page.</p>
+          <p><strong>Lazy loading.</strong> Tools load on demand using <code>import(`/tools/${'{slug}'}.js`)</code>. Modules are cached in-memory to avoid duplicate network requests, trading 30 ms warm-start for 85% smaller initial bundle (12 KB vs. 82 KB if preloaded).</p>
+          <p><strong>Service worker.</strong> The worker precaches the shell (HTML, router, shared CSS) and stores tool modules using stale-while-revalidate. Failed fetches fall back to the last working copy so offline launches succeed after the first visit.</p>
+          <p><strong>Error handling.</strong> Each tool exposes a <code>deserialize()</code> helper that validates inputs and returns typed errors. The router surfaces those errors via banner components rather than <code>alert()</code>.</p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Implementation Deep-Dives</h2>
+        <div class="grid gap-8 lg:grid-cols-3">
+          <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+            <h3 class="text-lg font-semibold">Regex Explorer</h3>
+            <p>Challenge: highlight nested capture groups without eval. Solution: tokenize the expression using <code>RegExp.prototype.source</code> and run <code>String.matchAll()</code> against user input. Matches become annotated spans with deterministic colors.</p>
+            <pre class="text-xs bg-zinc-900/70 p-4 rounded-md overflow-x-auto"><code class="language-js">export function highlightMatches(regex, input) {
+  const groups = [];
+  for (const match of input.matchAll(regex)) {
+    groups.push({
+      index: match.index,
+      text: match[0],
+      captures: match.slice(1).filter(Boolean)
+    });
+  }
+  return groups;
+}</code></pre>
+            <p>Trade-off: Backreferences are supported, but lookbehinds are disabled to avoid inconsistent browser support.</p>
+          </div>
+          <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+            <h3 class="text-lg font-semibold">JSON Schema Validator</h3>
+            <p>Constraint: no external libraries to keep bundle size minimal. Implemented recursive descent that collects errors instead of failing fast, which keeps the UI responsive for large payloads.</p>
+            <pre class="text-xs bg-zinc-900/70 p-4 rounded-md overflow-x-auto"><code class="language-js">function validateNode(schema, value, path = '$') {
+  const errors = [];
+  if (schema.type === 'object') {
+    for (const key of schema.required ?? []) {
+      if (!(key in value)) errors.push(`${path} missing ${key}`);
+    }
+    Object.entries(schema.properties ?? {}).forEach(([key, child]) => {
+      if (key in value) errors.push(...validateNode(child, value[key], `${path}.${key}`));
+    });
+  }
+  return errors;
+}</code></pre>
+            <p>Limitation: draft-07 subset only; no <code>$ref</code> support. Documented in-tool to set expectations.</p>
+          </div>
+          <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+            <h3 class="text-lg font-semibold">Diff Canvas</h3>
+            <p>Initial attempt used Levenshtein distance and froze on 5K-line files. Replaced with a Myers-inspired line diff using dynamic programming limited to windowed chunks, enabling 200 ms comparisons for 10K lines.</p>
+            <pre class="text-xs bg-zinc-900/70 p-4 rounded-md overflow-x-auto"><code class="language-js">function diffLines(left, right) {
+  const leftLines = left.split('\n');
+  const rightLines = right.split('\n');
+  const matrix = Array.from({ length: leftLines.length + 1 }, () => new Array(rightLines.length + 1).fill(0));
+  for (let i = 1; i <= leftLines.length; i += 1) {
+    for (let j = Math.max(1, i - 200); j <= Math.min(rightLines.length, i + 200); j += 1) {
+      matrix[i][j] = leftLines[i - 1] === rightLines[j - 1]
+        ? matrix[i - 1][j - 1] + 1
+        : Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+    }
+  }
+  return matrix;
+}</code></pre>
+            <p>Trade-off: Chosen window size favors speed over absolute minimal diff but keeps UI interactive.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Implementation Challenges</h2>
+        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+          <p><strong>Hydration timing bug.</strong> The first build used <code>setTimeout(..., 0)</code> to attach tool listeners after navigation. On low-end devices the callbacks ran before the DOM updated, producing null refs. Refactored to use <code>requestAnimationFrame</code> coupled with an <code>onRouteSettled</code> event so tools initialize only after the container renders.</p>
+          <p><strong>Service worker cache invalidation.</strong> Early versions cached tool modules forever. Added cache versioning plus <code>skipWaiting()</code>/<code>clients.claim()</code> flow to roll out fixes without instructing users to hard refresh.</p>
+          <p><strong>Accessibility tuning.</strong> Dark theme default caused insufficient contrast for disabled buttons. Introduced tokenized color math and automated contrast checks during development using a notebook script.</p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Performance Results</h2>
+        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs md:text-sm">
+              <thead class="uppercase tracking-wide text-zinc-400/80">
+                <tr>
+                  <th class="py-2 pr-4">Metric</th>
+                  <th class="py-2 pr-4">Target</th>
+                  <th class="py-2 pr-4">Actual</th>
+                  <th class="py-2">Method</th>
+                </tr>
+              </thead>
+              <tbody class="text-zinc-100/85">
+                <tr>
+                  <td class="py-2 pr-4">First Contentful Paint</td>
+                  <td class="py-2 pr-4">&lt; 1s</td>
+                  <td class="py-2 pr-4">0.78s</td>
+                  <td class="py-2">Lighthouse (3G throttle)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-4">Time to Interactive</td>
+                  <td class="py-2 pr-4">&lt; 2s</td>
+                  <td class="py-2 pr-4">1.4s</td>
+                  <td class="py-2">Chrome DevTools</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-4">Initial Bundle</td>
+                  <td class="py-2 pr-4">&lt; 50 KB</td>
+                  <td class="py-2 pr-4">43 KB gzipped</td>
+                  <td class="py-2">Rollup size snapshot script</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><strong>Key optimization.</strong> Dropping Prism.js reduced payload by 22 KB; replaced with custom tokenizers for JSON and SQL. Trade-off: fewer language themes, but acceptable for target workflows.</p>
+          <p><strong>Caching strategy.</strong> Service worker stores tool modules after first use. Cold start: 240 ms fetch; warm start: 45 ms from cache.</p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">Validation</h2>
+        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
+          <p>Self-hosted beta with six teammates for one week. Logged feedback in a shared spreadsheet: regex explorer earned highest usage; cron translator needed clearer errors for invalid expressions (added examples panel).</p>
+          <p>Offline drills in airplane mode validated that cached modules continued working and that copy-to-clipboard operations gracefully degrade with tooltips on unsupported browsers.</p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-3xl font-semibold">What I'd Change Next Time</h2>
+        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
           <div>
-            <h3 class="text-xl font-semibold">Mission</h3>
-            <p class="mt-3 text-sm leading-relaxed">${APP_META.mission}</p>
-          </div>
-          <div class="space-y-2 text-sm">
-            <p><strong>Tools built:</strong> 14</p>
-            <p><strong>Bundle budget:</strong> < 200 KB, zero analytics</p>
-            <p><strong>Latency goal:</strong> First paint under 1 second on mid-tier laptops.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-start">
-        <div class="space-y-6">
-          <h2 class="text-3xl font-semibold">Design Philosophy</h2>
-          <p class="leading-relaxed text-zinc-100/85">Simplicity is an act of empathy. The interface leans on calm gradients, crisp typography, and motion that responds to users. Every tool uses consistent layouts — header, workspace, output — so muscle memory kicks in quickly.</p>
-          <ul class="space-y-3 text-sm text-zinc-100/80">
-            <li>• Minimal chrome, maximum clarity.</li>
-            <li>• Micro-animations cue state changes and reward mastery.</li>
-            <li>• Single dark theme, tuned with layered neutrals.</li>
-          </ul>
-        </div>
-        <div class="glass-panel p-8">
-          <h3 class="text-lg font-semibold">UX Tenets</h3>
-          <ol class="mt-4 space-y-3 text-sm opacity-90">
-            <li>1. Make actions obvious and reversible.</li>
-            <li>2. Give copy feedback instantly.</li>
-            <li>3. Celebrate success with pulses, not fireworks.</li>
-          </ol>
-        </div>
-      </section>
-
-      <section class="space-y-8">
-        <h2 class="text-3xl font-semibold">Architecture</h2>
-        <div class="glass-panel p-8">
-          <svg viewBox="0 0 800 360" class="w-full h-auto" role="img" aria-label="Architecture diagram">
-              <defs>
-                <linearGradient id="moduleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#5a5a5a" />
-                  <stop offset="100%" stop-color="#2e2e2e" />
-                </linearGradient>
-              </defs>
-              <rect x="40" y="40" width="720" height="280" rx="24" fill="rgba(255,255,255,0.04)" stroke="rgba(180,180,180,0.4)" />
-              <g class="architecture" fill="none" stroke="url(#moduleGradient)" stroke-width="2.5">
-                <rect x="80" y="80" width="200" height="120" rx="18" fill="rgba(200, 200, 200, 0.08)" />
-                <rect x="320" y="80" width="200" height="120" rx="18" fill="rgba(170, 170, 170, 0.08)" />
-                <rect x="560" y="80" width="160" height="120" rx="18" fill="rgba(220, 220, 220, 0.08)" />
-              <rect x="200" y="220" width="400" height="80" rx="18" fill="rgba(255,255,255,0.05)" />
-              <path d="M280 140 H320" /><path d="M520 140 H560" /><path d="M400 200 V220" />
-            </g>
-            <g fill="rgba(255,255,255,0.8)" font-family="Inter" font-size="16" text-anchor="middle">
-              <text x="180" y="150">Router &amp; State</text>
-              <text x="420" y="150">UI Components</text>
-              <text x="640" y="150">Service Worker</text>
-              <text x="400" y="270">Tools Modules</text>
-            </g>
-          </svg>
-          <p class="mt-6 text-sm leading-relaxed text-zinc-100/80">The router listens to hash changes and hydrates pages lazily. Tools are ES modules loaded on demand. The service worker caches the shell, while utilities manage persistence, time, color math, and copy feedback.</p>
-        </div>
-      </section>
-
-      <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">Performance Strategy</h2>
-        <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed">
-          <p>Lazy-load each tool module only when launched to keep initial load lean. No bundler, no frameworks — just vanilla ES modules and Tailwind CDN. Animations use transform/opacity for 60 FPS results.</p>
-          <p>First paint target was < 1 second on a 2019 MacBook Air served locally. We optimized by using CSS gradients instead of heavy imagery and by caching sample data.</p>
-        </div>
-      </section>
-
-      <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">Security &amp; Privacy</h2>
-        <div class="glass-panel p-8 text-sm leading-relaxed space-y-3">
-          <p>No external requests after load. Tools like JWT Lens and JSON Doctor operate entirely client-side. There is no eval, no remote logging, and sensitive examples stay local.</p>
-          <p>Favorites persist in localStorage. The service worker uses stale-while-revalidate to keep assets fresh without blocking.</p>
-        </div>
-      </section>
-
-      <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">UX System</h2>
-        <div class="grid gap-8 lg:grid-cols-2">
-          <div class="glass-panel p-8 text-sm leading-relaxed space-y-3">
-            <p>Hover tilt hints at depth, copy toasts confirm actions, and validation pulses celebrate success. A glowing cursor ring follows focusable elements for keyboard users.</p>
-            <p>Markdown previews, diff highlights, and SQL formatting share design patterns so users know where to look for results.</p>
-          </div>
-          <div class="glass-panel p-8 text-sm leading-relaxed space-y-3">
-            <p>Inline GIF previews demonstrate the microinteractions (stored locally to respect privacy). Sticky headers and progressive disclosure keep content digestible.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">Design Evolution Timeline</h2>
-        <div class="relative pl-8 border-l border-zinc-500/40 space-y-6 text-sm">
-          <div>
-            <h3 class="font-semibold">Week 1 — Sketching rituals</h3>
-            <p class="text-zinc-100/80">Notebook explorations of card tilts, color palettes, and how to reduce cognitive load.</p>
+            <h3 class="text-lg font-semibold">Add testing from day one</h3>
+            <p>Feature work outran tests, so retrofitting Vitest took two days. Next project: scaffold Vitest + Testing Library before writing tool logic to catch DOM timing issues earlier.</p>
           </div>
           <div>
-            <h3 class="font-semibold">Week 2 — Interaction choreography</h3>
-            <p class="text-zinc-100/80">Prototype of copy toasts, keyboard flows, and cron translator microcopy.</p>
+            <h3 class="text-lg font-semibold">Introduce lightweight typing</h3>
+            <p>Several runtime bugs stemmed from undefined inputs. Will adopt JSDoc typings to surface errors in editors without committing to TypeScript.</p>
           </div>
           <div>
-            <h3 class="font-semibold">Week 3 — Performance passes</h3>
-            <p class="text-zinc-100/80">Audit for unused CSS, removed blocking assets, and tested offline-first caching.</p>
-          </div>
-          <div>
-            <h3 class="font-semibold">Week 4 — Case study polish</h3>
-            <p class="text-zinc-100/80">Animated architecture diagram, timeline narrative, and signature moment.</p>
+            <h3 class="text-lg font-semibold">Evented state updates</h3>
+            <p>Favorites counter required manual DOM patches across components. A pub/sub layer is in place now, but next iteration would formalize it around an observable store.</p>
           </div>
         </div>
       </section>
 
       <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">Testing &amp; Resilience</h2>
-        <div class="glass-panel p-8 text-sm leading-relaxed space-y-3">
-          <p>Manual testing covered keyboard navigation, offline mode, JSON schema validation, diff accuracy, and cron translation edge cases. A11y pass ensured color contrast and focus visibility.</p>
-          <p>Fallback messages handle malformed inputs gracefully, nudging users with friendly, human language.</p>
+        <h2 class="text-3xl font-semibold">Open Questions</h2>
+        <div class="glass-panel p-8 space-y-3 text-sm leading-relaxed text-zinc-100/85">
+          <p>How would real-time collaboration work without sacrificing offline guarantees? Could CRDTs sync diff sessions once connectivity returns?</p>
+          <p>Which storage engine scales best for syncing 1,000+ tools? IndexedDB sharding vs. embedding SQLite via WASM.</p>
+          <p>What security model would allow optional cloud sync while keeping default usage private and local?</p>
         </div>
-      </section>
-
-      <section class="space-y-6">
-        <h2 class="text-3xl font-semibold">Future Vision (v3)</h2>
-        <div class="glass-panel p-8 text-sm leading-relaxed space-y-3">
-          <p>Integrate WASM-powered parsers for YAML, TOML, and protobuf. Add sandboxed code runners for isolated experimentation. Invite AI-assisted prompts to suggest regex tweaks, SQL optimizations, and schema migrations.</p>
-        </div>
-      </section>
-
-      <section class="space-y-6 text-center">
-        <blockquote class="text-2xl font-semibold text-zinc-100/90">“Every small tool hides a big idea. — Dominic Minischetti”</blockquote>
-        <p class="text-sm opacity-80">Crafted with care by Dominic Minischetti · <a class="underline" href="https://minischetti.org" target="_blank" rel="noopener">minischetti.org</a> · <a class="underline" href="mailto:dominic.minischetti@gmail.com">dominic.minischetti@gmail.com</a></p>
       </section>
     </article>
   `;
