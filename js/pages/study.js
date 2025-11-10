@@ -37,7 +37,7 @@ export default function renderStudy() {
         <div class="glass-panel p-8 space-y-5 text-sm leading-relaxed text-zinc-100/85">
           <p><strong>Routing.</strong> A 1.5 KB hash router listens to <code>window.hashchange</code>, lazily importing page modules. Route handlers receive the current state object so they can render without global lookups.</p>
           <p><strong>State management.</strong> Shared metadata lives in <code>state.js</code>. It exposes a tiny pub/sub API (<code>subscribe(event, handler)</code>) so tools can react to favorite toggles without rerendering the entire page.</p>
-          <p><strong>Lazy loading.</strong> Tools load on demand using <code>import(`/tools/${'{slug}'}.js`)</code>. Modules are cached in-memory to avoid duplicate network requests, trading 30 ms warm-start for 85% smaller initial bundle (12 KB vs. 82 KB if preloaded).</p>
+          <p><strong>Lazy loading.</strong> Tools load on demand using <code>import(\`/tools/\${slug}.js\`)</code>. Modules are cached in-memory to avoid duplicate network requests, trading 30 ms warm-start for 85% smaller initial bundle (12 KB vs. 82 KB if preloaded).</p>
           <p><strong>Service worker.</strong> The worker precaches the shell (HTML, router, shared CSS) and stores tool modules using stale-while-revalidate. Failed fetches fall back to the last working copy so offline launches succeed after the first visit.</p>
           <p><strong>Error handling.</strong> Each tool exposes a <code>deserialize()</code> helper that validates inputs and returns typed errors. The router surfaces those errors via banner components rather than <code>alert()</code>.</p>
         </div>
