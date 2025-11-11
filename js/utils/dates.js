@@ -86,7 +86,8 @@ export function convertToZone(date, zone = 'UTC') {
       second: '2-digit'
     }).format(safeDate);
   } catch (error) {
-    throw new Error(`Unsupported time zone: ${zone}`);
+    const message = `Unsupported time zone: ${zone}`;
+    throw new Error(message);
   }
 }
 

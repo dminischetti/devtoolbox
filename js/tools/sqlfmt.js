@@ -66,7 +66,8 @@ function formatSql(sql) {
     } else if (token === 'BY') {
       current.push(token);
     } else if (token === 'AND' || token === 'OR') {
-      current.push(`\n  ${token}`);
+      const clauseToken = `\n  ${token}`;
+      current.push(clauseToken);
     } else {
       current.push(token);
     }

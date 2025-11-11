@@ -115,6 +115,7 @@ function atobUrlSafe(value) {
     const decoder = new TextDecoder('utf-8', { fatal: true });
     return decoder.decode(bytes);
   } catch (error) {
-    throw new Error(`Invalid base64url encoding: ${error.message}`);
+    const message = `Invalid base64url encoding: ${error.message}`;
+    throw new Error(message);
   }
 }

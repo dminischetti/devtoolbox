@@ -76,14 +76,18 @@ async function init() {
 function validateData(schema, data, path) {
   const errors = [];
   if (schema.type) {
+    const typeError = (expected) => `${path} should be ${expected}`;
     if (schema.type === 'object') {
       if (typeof data !== 'object' || data === null || Array.isArray(data)) {
-        errors.push(`${path} should be an object`);
+        errors.push(typeError('an object'));
         return errors;
       }
       if (schema.required) {
         schema.required.forEach((key) => {
-          if (!(key in data)) errors.push(`${path} missing required property ${key}`);
+          if (!(key in data)) {
+            const missingPropertyMessage = `${path} missing required property ${key}`;
+            errors.push(missingPropertyMessage);
+          }
         });
       }
       if (schema.properties) {
@@ -95,18 +99,18 @@ function validateData(schema, data, path) {
       }
     } else if (schema.type === 'array') {
       if (!Array.isArray(data)) {
-        errors.push(`${path} should be an array`);
+        errors.push(typeError('an array'));
       } else if (schema.items) {
         data.forEach((item, index) => {
           errors.push(...validateData(schema.items, item, `${path}/${index}`));
         });
       }
     } else if (schema.type === 'string') {
-      if (typeof data !== 'string') errors.push(`${path} should be a string`);
+      if (typeof data !== 'string') errors.push(typeError('a string'));
     } else if (schema.type === 'number') {
-      if (typeof data !== 'number') errors.push(`${path} should be a number`);
+      if (typeof data !== 'number') errors.push(typeError('a number'));
     } else if (schema.type === 'boolean') {
-      if (typeof data !== 'boolean') errors.push(`${path} should be a boolean`);
+      if (typeof data !== 'boolean') errors.push(typeError('a boolean'));
     }
   }
   return errors;
