@@ -56,18 +56,22 @@ function parseMarkdown(text) {
   lines.forEach((line) => {
     if (line.startsWith('# ')) {
       flushList();
-      html.push(`<h1>${escapeHtml(line.slice(2))}</h1>`);
+      const heading = escapeHtml(line.slice(2));
+      html.push(`<h1>${heading}</h1>`);
     } else if (line.startsWith('## ')) {
       flushList();
-      html.push(`<h2>${escapeHtml(line.slice(3))}</h2>`);
+      const subheading = escapeHtml(line.slice(3));
+      html.push(`<h2>${subheading}</h2>`);
     } else if (line.startsWith('- ')) {
-      list.push(`<li>${escapeHtml(line.slice(2))}</li>`);
+      const item = escapeHtml(line.slice(2));
+      list.push(`<li>${item}</li>`);
     } else if (line.trim() === '') {
       flushList();
       html.push('<p class="h-4"></p>');
     } else {
       flushList();
-      html.push(`<p>${escapeHtml(line)}</p>`);
+      const paragraph = escapeHtml(line);
+      html.push(`<p>${paragraph}</p>`);
     }
   });
   flushList();

@@ -48,7 +48,8 @@ export function initRouter(root) {
         renderPageTransition(root, `<section class="py-24 text-center">\n          <h1 class="text-3xl font-semibold">Tool not found.</h1>\n          <p class="mt-4 text-zinc-200/80">Double-check the URL or explore the tools hub.</p>\n        </section>`);
         return;
       }
-      const module = await import(`./tools/${slug}.js`);
+      const toolModulePath = `./tools/${slug}.js`;
+      const module = await import(toolModulePath);
       const view = module.default(tool);
       renderPageTransition(root, view);
       currentRoute = hash;
