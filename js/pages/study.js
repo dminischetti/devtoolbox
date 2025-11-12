@@ -65,18 +65,20 @@ export default function renderStudy() {
           <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
             <h3 class="text-lg font-semibold">JSON Schema Validator</h3>
             <p>Constraint: no external libraries to keep bundle size minimal. Implemented recursive descent that collects errors instead of failing fast, which keeps the UI responsive for large payloads.</p>
-            <pre class="text-xs bg-zinc-900/70 p-4 rounded-md overflow-x-auto"><code class="language-js">function validateNode(schema, value, path = '$') {
-  const errors = [];
-  if (schema.type === 'object') {
-    for (const key of schema.required ?? []) {
-      if (!(key in value)) errors.push(`&#36;{path} missing &#36;{key}`);
-    }
-    Object.entries(schema.properties ?? {}).forEach(([key, child]) => {
-      if (key in value) errors.push(...validateNode(child, value[key], `&#36;{path}.&#36;{key}`));
-    });
-  }
-  return errors;
-}</code></pre>
+            <pre class="text-xs bg-zinc-900/70 p-4 rounded-md overflow-x-auto"><code class="language-js">${[
+              "function validateNode(schema, value, path = '$') {",
+              "  const errors = [];",
+              "  if (schema.type === 'object') {",
+              "    for (const key of schema.required ?? []) {",
+              "      if (!(key in value)) errors.push(`${path} missing ${key}`);",
+              "    }",
+              "    Object.entries(schema.properties ?? {}).forEach(([key, child]) => {",
+              "      if (key in value) errors.push(...validateNode(child, value[key], `${path}.${key}`));",
+              "    });",
+              "  }",
+              "  return errors;",
+              "}"
+            ].join('\n')}</code></pre>
             <p>Limitation: draft-07 subset only; no <code>$ref</code> support. Documented in-tool to set expectations.</p>
           </div>
           <div class="glass-panel p-8 space-y-4 text-sm leading-relaxed text-zinc-100/85">
