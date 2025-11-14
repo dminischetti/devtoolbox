@@ -159,7 +159,7 @@ export default function renderHome() {
           </div>
           <div class="highlight-card">
             <strong>Responsive &amp; inclusive</strong>
-            <span>Fluid typography, accessible focus states, and light/dark modes that remember your choice.</span>
+            <span>Fluid typography, accessible focus states, and a cohesive dark theme tuned for every display.</span>
           </div>
           <div class="highlight-card">
             <strong>Zero telemetry</strong>
