@@ -65,7 +65,7 @@ export function layoutFrame(content) {
       <div class="shell footer-meta" role="contentinfo">
         <p><strong>DevToolbox</strong> · Designed, engineered, and analyzed by Dominic Minischetti.</p>
           <p>Independent study · © 2025</p>
-          <a class="site-footer__link" href="https://minischetti.com" target="_blank" rel="noopener">Explore more projects →</a>
+          <a class="site-footer__link" href="https://minischetti.org" target="_blank" rel="noopener">Explore more projects →</a>
         </div>
     </footer>
     <div class="copy-toast" id="copy-toast" role="status" aria-live="polite">Copied ✓</div>
